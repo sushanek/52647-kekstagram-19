@@ -2,7 +2,7 @@
 var SUM_PHOTO_ARRAYS = 25;
 var MAX_COMMENTS = 15;
 var MIN_LIKES = 15;
-var MAX_LIKES = 185;
+var MAX_LIKES = 200;
 var MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -33,7 +33,8 @@ var pictureTemplate = document.querySelector('#picture')
     .content
     .querySelector('.picture');
 var getRandom = function (end, start) {
-  start = typeof start !== 'undefined' ? start : 0;
+  start = start || 0;
+  end = end - start;
   return Math.floor(Math.random() * end + start);
 };
 
@@ -57,7 +58,7 @@ var createPhotoArrays = function (count) {
     photoArrays.push({
       'url': 'photos/' + (i + 1) + '.jpg',
       'description': DESCRIPTIONS[getRandom(DESCRIPTIONS.length)],
-      'likes': getRandom(MIN_LIKES, MAX_LIKES),
+      'likes': getRandom(MAX_LIKES, MIN_LIKES),
       'comments': getComments()
     });
   }

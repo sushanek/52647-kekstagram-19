@@ -2,7 +2,6 @@
 
 (function () {
   var ESC_KEY = 27;
-  var VALID_HASHTAG_SYMBOL = /#{1}[A-Za-zА-Яа-я0-9]*$/;
 
   var uploadInput = document.querySelector('.img-upload__input');
   var imgUploadPopup = document.querySelector('.img-upload__overlay');
@@ -53,36 +52,67 @@
 
   // обработка формы
   var chekedHashtags = function (hashtags) {
-    hashtags = hashtags.split(' ');
-    if ((hashtags.length < 6) && (hashtags.length > 0)) {
-      for (var i = 0; i < hashtags.length; i++) {
-        var test = hashtags[i];
-        if (test.charAt(0) !== '#') {
-          return ('Хэш-тэг должен начинаться с решетки');
-        } else if (test.lenght < 2) {
-          return ('Хэш-тэг не может состоять только из одной решетки');
-        } else if (test.lenght > 20) {
-          return ('Хэш-тэг не может быть больше 20 символов');
-        } else if (!(VALID_HASHTAG_SYMBOL.test(test))) {
-          return ('Хэш-тэг должен содержать только буквы и цифры');
+    hashtags = hashtags.replace(/\s+/g, ' '); // Убираем повторяющиеся пробелы
+    hashtags = hashtags.trim().toLowerCase().split(' ');
+    var errorMessage;
+
+    // Функция проверка на наличие дублей в массиве
+    var checkDouble = function (array) {
+      var isDouble = false;
+      for (var i = 0; i < array.length; i++) {
+        for (var j = 1; j < array.length; j++) {
+          if (array[i] === array[j]) {
+            isDouble = true;
+          }
         }
       }
-    } else {
-      return ('Хэш тегов не может быть больше 5' + hashtags.length);
+      return isDouble;
+    };
+
+    // Функция проверки самих хэш-тегов
+    var checkTag = function (tag) {
+      var VALID_SYMBOL = /^#[A-Za-zА-Яа-я0-9]*$/;
+      if (tag.charAt(0) !== '#') {
+        errorMessage = 'Хэш-тэг должен начинаться с решетки';
+      } else if (tag.length < 2) {
+        errorMessage = 'Хэш-тэг не может состоять только из одной решетки';
+      } else if (tag.length > 20) {
+        errorMessage = 'Хэш-тэг не может быть больше 20 символов';
+      } else if (!(VALID_SYMBOL.test(tag))) {
+        errorMessage = 'Хэш-тэг должен содержать только буквы и цифры';
+      }
+    };
+
+    // Проверка хэш-тегов
+    if (hashtags.length >= 5) {
+      errorMessage = 'Хэш-тегов не может быть больше 5';
     }
-    return 0;
+
+    if (hashtags.length > 0) {
+      for (var i = 0; i < hashtags.length; i++) {
+        checkTag(hashtags[i]);
+      }
+    }
+
+    if (checkDouble(hashtags)) {
+      errorMessage = 'Хэш-теги не должны повторяться';
+    }
+
+    return errorMessage;
   };
 
   var uploadForm = document.querySelector('.img-upload__form');
+  var hashtagsInput = uploadForm.querySelector('.text__hashtags');
 
-  uploadForm.addEventListener('submit', function (evt) {
-    var hashtags = uploadForm.querySelector('.text__hashtags').value; // получаем значения поля с хэштегами
-    if (chekedHashtags(hashtags)) {
-      evt.preventDefault();
-      console.log(chekedHashtags(hashtags));
-      uploadForm.querySelector('.text__hashtags').setCustomValidity(chekedHashtags(hashtags));
+  hashtagsInput.addEventListener('change', function (evt) {
+    var target = evt.target;
+    if (chekedHashtags(target.value)) {
+      target.setCustomValidity(chekedHashtags(target.value));
+      uploadForm.reportValidity();
     }
+
+    hashtagsInput.addEventListener('input', function (inputEvt) {
+      inputEvt.target.setCustomValidity('');
+    });
   });
-
-
 })();

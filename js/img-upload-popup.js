@@ -58,15 +58,14 @@
 
     // Функция проверка на наличие дублей в массиве
     var checkDouble = function (array) {
-      var isDouble = false;
       for (var i = 0; i < array.length; i++) {
-        for (var j = 1; j < array.length; j++) {
-          if (array[i] === array[j]) {
-            isDouble = true;
+        for (var j = 0; j < array.length; j++) {
+          if (array[i] === array[j] && i !== j) {
+            return true;
           }
         }
       }
-      return isDouble;
+      return false;
     };
 
     // Функция проверки самих хэш-тегов
@@ -104,15 +103,17 @@
   var uploadForm = document.querySelector('.img-upload__form');
   var hashtagsInput = uploadForm.querySelector('.text__hashtags');
 
+  var handleInput = function (evt) {
+    evt.target.setCustomValidity('');
+    hashtagsInput.removeEventListener('input', handleInput);
+  };
+
   hashtagsInput.addEventListener('change', function (evt) {
     var target = evt.target;
     if (chekedHashtags(target.value)) {
       target.setCustomValidity(chekedHashtags(target.value));
+      hashtagsInput.addEventListener('input', handleInput);
       uploadForm.reportValidity();
     }
-
-    hashtagsInput.addEventListener('input', function (inputEvt) {
-      inputEvt.target.setCustomValidity('');
-    });
   });
 })();

@@ -32,11 +32,6 @@
     uploadInput.value = '';
   };
 
-  // очищаем форму после отправки.
-  imgUploadForm.addEventListener('submit', function () {
-    imgUploadForm.reset();
-  });
-
   // Отслеживает события по клику
   uploadInput.addEventListener('change', openPopup);
   uploadClose.addEventListener('click', closePopup);
@@ -92,13 +87,13 @@
 
     // Функция проверки самих хэштегов
     var checkTag = function (tag) {
-      if (tag.charAt(0) !== '#') {
+      if (tag.charAt(0) !== '#' && tag.length > 0) {
         errorMessage = MESSAGE_FIRST_SYMBOL;
-      } else if (tag.length < MIN_SYMBOL) {
+      } else if (tag.charAt(0) === '#' && tag.length < MIN_SYMBOL) {
         errorMessage = MESSAGE_MIN_SYMBOL;
       } else if (tag.length > MAX_SYMBOL) {
         errorMessage = MESSAGE_MAX_SYMBOL;
-      } else if (!(VALID_SYMBOL.test(tag))) {
+      } else if (!(VALID_SYMBOL.test(tag)) && tag.length > 0) {
         errorMessage = MESSAGE_VALID_SYMBOL;
       }
     };

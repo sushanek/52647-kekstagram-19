@@ -3,8 +3,9 @@
 (function () {
   var ESC_KEY = 27;
 
-  var uploadInput = document.querySelector('.img-upload__input');
-  var imgUploadPopup = document.querySelector('.img-upload__overlay');
+  var imgUploadForm = document.querySelector('.img-upload__form');
+  var uploadInput = imgUploadForm.querySelector('.img-upload__input');
+  var imgUploadPopup = imgUploadForm.querySelector('.img-upload__overlay');
   var uploadClose = imgUploadPopup.querySelector('.img-upload__cancel');
 
   // Функция для обработки нажатия ESC
@@ -27,8 +28,14 @@
     imgUploadPopup.classList.add('hidden');
     document.removeEventListener('keydown', onPopupEscPress);
     effectLevelPin.removeEventListener('mouseup', getEffectLevelPinPosition);
+    imgUploadForm.reset();
     uploadInput.value = '';
   };
+
+  // очищаем форму после отправки.
+  imgUploadForm.addEventListener('submit', function () {
+    imgUploadForm.reset();
+  });
 
   // Отслеживает события по клику
   uploadInput.addEventListener('change', openPopup);
@@ -46,8 +53,7 @@
     var effectLevelLineWidth = effectLevelLine.offsetWidth; // Длина програсс-бара
     var effectLevelPinPosition = evt.target.offsetLeft; // положение ползунка
     var effectLevelLineStep = effectLevelLineWidth / 100; // Шаг-пропорция в процентах
-    var effectLevelPinPositionPercent = Math.round(effectLevelPinPosition / effectLevelLineStep); // позиция в процентах
-    return effectLevelPinPositionPercent;
+    return Math.round(effectLevelPinPosition / effectLevelLineStep); // возвращаем позицию в процентах
   };
 
   // обработка формы
@@ -98,16 +104,15 @@
     };
 
     // Проверка хэштегов
-    if (hashtags.length >= 5) {
+    if (hashtags.length > HASHTAGS_AMOUNT) {
       errorMessage = MESSAGE_HASHTAGS_AMOUNT;
+    } else if (checkDouble(hashtags)) {
+      errorMessage = MESSAGE_HASHTAGS_REPEAT;
     } else if (hashtags.length > 0) {
       for (var i = 0; i < hashtags.length; i++) {
         checkTag(hashtags[i]);
       }
-    } else if (checkDouble(hashtags)) {
-      errorMessage = MESSAGE_HASHTAGS_REPEAT;
     }
-
     return errorMessage;
   };
 

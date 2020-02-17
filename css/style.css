@@ -212,8 +212,8 @@ main {
   display: grid;
   grid-gap: 10px;
 
-  -ms-grid-columns: (1fr)[7];
-      grid-template-columns: repeat(7, 1fr);
+  -ms-grid-columns: (7, 1fr);
+  grid-template-columns: repeat(7, 1fr);
 }
 
 .picture {
@@ -749,6 +749,10 @@ main {
   color: #000000;
 
   border-radius: 5px;
+}
+
+.text__hashtags:invalid {
+  border: 1px solid red;
 }
 
 .text__description {
@@ -1408,7 +1412,7 @@ main {
   }
 
   .pictures {
-    -ms-grid-columns: (1fr)[5];
+    -ms-grid-columns: (5, 1fr);
     grid-template-columns: repeat(5, 1fr);
   }
 
@@ -1429,7 +1433,7 @@ main {
   }
 
   .pictures {
-    -ms-grid-columns: (1fr)[3];
+    -ms-grid-columns: (3, 1fr);
     grid-template-columns: repeat(3, 1fr);
   }
 

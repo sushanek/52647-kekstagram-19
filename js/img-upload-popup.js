@@ -52,7 +52,23 @@
 
   // обработка формы
   var chekedHashtags = function (hashtags) {
-    hashtags = hashtags.replace(/\s+/g, ' '); // Убираем повторяющиеся пробелы
+    var VALID_SYMBOL = /^#[A-Za-zА-Яа-я0-9]*$/;
+    var MIN_SYMBOL = 2;
+    var MAX_SYMBOL = 20;
+    var HASHTAGS_AMOUNT = 5;
+    var MESSAGE_FIRST_SYMBOL = 'Хэштэг должен начинаться с #';
+    var MESSAGE_MIN_SYMBOL = 'Хэштэг не может быть меньше ' + MIN_SYMBOL + ' символов';
+    var MESSAGE_MAX_SYMBOL = 'Хэштэг не может быть больше ' + MAX_SYMBOL + ' символов';
+    var MESSAGE_VALID_SYMBOL = 'Хэштэг должен содержать только буквы и цифры';
+    var MESSAGE_HASHTAGS_AMOUNT = 'Хэштегов не может быть больше ' + HASHTAGS_AMOUNT;
+    var MESSAGE_HASHTAGS_REPEAT = 'Хэштеги не должны повторяться';
+
+    // Убираем повторяющиеся пробелы
+    hashtags = hashtags.replace(/\s+/g, ' ');
+
+    // Обрезаем пробелы по краям строки
+    // переводим все буквы в нижний регистр
+    // разбиваем строку на массив
     hashtags = hashtags.trim().toLowerCase().split(' ');
     var errorMessage;
 
@@ -68,33 +84,28 @@
       return false;
     };
 
-    // Функция проверки самих хэш-тегов
+    // Функция проверки самих хэштегов
     var checkTag = function (tag) {
-      var VALID_SYMBOL = /^#[A-Za-zА-Яа-я0-9]*$/;
       if (tag.charAt(0) !== '#') {
-        errorMessage = 'Хэш-тэг должен начинаться с решетки';
-      } else if (tag.length < 2) {
-        errorMessage = 'Хэш-тэг не может состоять только из одной решетки';
-      } else if (tag.length > 20) {
-        errorMessage = 'Хэш-тэг не может быть больше 20 символов';
+        errorMessage = MESSAGE_FIRST_SYMBOL;
+      } else if (tag.length < MIN_SYMBOL) {
+        errorMessage = MESSAGE_MIN_SYMBOL;
+      } else if (tag.length > MAX_SYMBOL) {
+        errorMessage = MESSAGE_MAX_SYMBOL;
       } else if (!(VALID_SYMBOL.test(tag))) {
-        errorMessage = 'Хэш-тэг должен содержать только буквы и цифры';
+        errorMessage = MESSAGE_VALID_SYMBOL;
       }
     };
 
-    // Проверка хэш-тегов
+    // Проверка хэштегов
     if (hashtags.length >= 5) {
-      errorMessage = 'Хэш-тегов не может быть больше 5';
-    }
-
-    if (hashtags.length > 0) {
+      errorMessage = MESSAGE_HASHTAGS_AMOUNT;
+    } else if (hashtags.length > 0) {
       for (var i = 0; i < hashtags.length; i++) {
         checkTag(hashtags[i]);
       }
-    }
-
-    if (checkDouble(hashtags)) {
-      errorMessage = 'Хэш-теги не должны повторяться';
+    } else if (checkDouble(hashtags)) {
+      errorMessage = MESSAGE_HASHTAGS_REPEAT;
     }
 
     return errorMessage;
@@ -103,16 +114,25 @@
   var uploadForm = document.querySelector('.img-upload__form');
   var hashtagsInput = uploadForm.querySelector('.text__hashtags');
 
+  // Функция сбрасывает ошибку и отписывается от наблюдения
   var handleInput = function (evt) {
     evt.target.setCustomValidity('');
     hashtagsInput.removeEventListener('input', handleInput);
   };
 
+  // Отслеживаем изменения в поле ввода при потере фокуса
   hashtagsInput.addEventListener('change', function (evt) {
-    var target = evt.target;
-    if (chekedHashtags(target.value)) {
-      target.setCustomValidity(chekedHashtags(target.value));
+    var errorMessage = chekedHashtags(evt.target.value);
+    // Если функция проверки возвращает строку ошибки
+    if (errorMessage) {
+
+      // Добовляем кастомное сообщение из функции
+      evt.target.setCustomValidity(errorMessage);
+
+      // Подписываемся на изменения в инпуте
       hashtagsInput.addEventListener('input', handleInput);
+
+      // Выдаем сообщение обо ошибке
       uploadForm.reportValidity();
     }
   });

@@ -7,10 +7,13 @@
   };
 
   var CODE_OK = 200;
-  var TIMEOUT = 100;
+  var TIMEOUT = 3000;
+  var ERROR_MESSAGE = 'Произошла ошибка';
+  var TIMOUT_MESSAGE = 'Истекло время ожидания: ';
+  var TIMEOUT_UNIT = ' секунд';
+  var TIMOUT_DIVISIN = 1000;
 
   window.load = function (method, onLoad, onError, data) {
-
     var xhr = new this.XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.open(method, URL[method]);
@@ -27,13 +30,13 @@
 
     // Обработка ошибоки если сервер не ответил
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка');
+      onError(ERROR_MESSAGE);
     });
 
     // Обработка таймаута
     xhr.addEventListener('timeout', function () {
-      var time = xhr.timeout / 1000;
-      var answer = 'Истекло время ожидания: ' + time + ' секунд';
+      var time = xhr.timeout / TIMOUT_DIVISIN;
+      var answer = TIMOUT_MESSAGE + time + TIMEOUT_UNIT;
       onError(answer);
     });
 

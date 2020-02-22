@@ -77,4 +77,21 @@
       uploadForm.reportValidity();
     }
   });
+
+  var loadHandler = function () {
+    closePopup();
+    window.getPopup('success');
+  };
+
+  var errorHandler = function () {
+    closePopup();
+    window.getPopup('error');
+  };
+
+
+  imgUploadForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.load('POST', loadHandler, errorHandler, new FormData(imgUploadForm));
+
+  });
 })();

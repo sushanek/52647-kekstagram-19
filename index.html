@@ -228,14 +228,27 @@
     </section>
   </template>
 
+  <!-- Комментарий -->
+  <template id ="social__comment">
+    <li class="social__comment">
+      <img class="social__picture"
+      src="{{аватар}}"
+      alt="{{имя комментатора}}"
+      width="35" height="35">
+      <p class="social__text">{{текст комментария}</p>
+    </li>
+  </template>
+
   <!-- Экран загрузки изображения -->
   <template id="messages">
     <div class="img-upload__message  img-upload__message--loading">Загружаем...</div>
   </template>
+
   <script src="js/popup.js"></script>
   <script src="js/data.js"></script>
   <script src="js/load.js"></script>
   <script src="js/picture.js"></script>
+  <script src="js/preview.js"></script>
   <script src="js/check-hashtags.js"></script>
   <script src="js/form.js"></script>
 </body>

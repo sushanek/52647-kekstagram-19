@@ -13,6 +13,8 @@
   var TIMEOUT_UNIT = ' секунд';
   var TIMOUT_DIVISIN = 1000;
 
+  window.photo = [];
+
   window.load = function (method, onLoad, onError, data) {
     var xhr = new this.XMLHttpRequest();
     xhr.responseType = 'json';

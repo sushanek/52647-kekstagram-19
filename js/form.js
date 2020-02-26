@@ -17,6 +17,7 @@
 
   // Функция открывает окно и добавляет отслеживания ESC
   var openPopup = function () {
+    document.querySelector('body').classList.add('modal-open');
     imgUploadPopup.classList.remove('hidden');
     document.addEventListener('keydown', onPopupEscPress);
     // Обработка события Отпускания мыши
@@ -25,6 +26,7 @@
 
   // Функция: Закрывает окно и убирает отслеживание нажатяи ESC
   var closePopup = function () {
+    document.querySelector('body').classList.remove('modal-open');
     imgUploadPopup.classList.add('hidden');
     document.removeEventListener('keydown', onPopupEscPress);
     effectLevelPin.removeEventListener('mouseup', getEffectLevelPinPosition);

@@ -49,6 +49,7 @@
 
     // Механизм закрытия окна
     var closePopup = function () {
+      document.querySelector('body').classList.remove('modal-open');
       place.removeChild(popup);
       document.removeEventListener('click', onPopupClick);
       document.removeEventListener('keydown', onPopupEscPress);

@@ -18,6 +18,7 @@
   };
 
   var loadHandle = function (photos) {
+    window.photo = photos;
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < photos.length; i++) {
       fragment.appendChild(renderPicture(photos[i]));

@@ -1,7 +1,9 @@
 'use strict';
 
 (function () {
-  var ESC_KEY = 27;
+
+  // Фокус на загрузке
+  document.querySelector('.img-upload__label').focus();
 
   var imgUploadForm = document.querySelector('.img-upload__form');
   var uploadInput = imgUploadForm.querySelector('.img-upload__input');
@@ -10,8 +12,13 @@
 
   // Функция для обработки нажатия ESC
   var onPopupEscPress = function (evt) {
-    if ((evt.keyCode === ESC_KEY) && (evt.target.tagName !== 'INPUT') && (evt.target.tagName !== 'TEXTAREA')) {
-      closePopup();
+    var targetClass = evt.target.className;
+    var inputClass = 'text__hashtags';
+    var textareaClass = 'text__description';
+
+    // Закрываем по ESC окно загрузки фотографии если нет фокуса на поля ввода
+    if (targetClass !== inputClass && targetClass !== textareaClass) {
+      window.utils.pressEscEvent(evt, closePopup);
     }
   };
 
@@ -22,6 +29,7 @@
     document.addEventListener('keydown', onPopupEscPress);
     // Обработка события Отпускания мыши
     effectLevelPin.addEventListener('mouseup', getEffectLevelPinPosition);
+    imgUploadPopup.querySelector('.text__hashtags').focus();
   };
 
   // Функция: Закрывает окно и убирает отслеживание нажатяи ESC

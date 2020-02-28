@@ -227,6 +227,12 @@ main {
   height: auto;
 }
 
+.picture:focus,
+.picture:hover {
+  outline: none;
+  box-shadow: 0 0 0px 1px #232321, 0 0 0px 2px #fe4d4d;
+}
+
 .picture__info {
   display: none;
 

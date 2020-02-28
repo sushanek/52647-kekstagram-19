@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-  var ESC_KEY = 27;
 
   // Место дом куда вставляем окно
   var place = document.querySelector('main');
@@ -56,9 +55,7 @@
     };
 
     var onPopupEscPress = function (evt) {
-      if (evt.keyCode === ESC_KEY) {
-        closePopup();
-      }
+      window.utils.pressEscEvent(evt, closePopup);
     };
 
     var onPopupClick = function () {

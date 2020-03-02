@@ -7,7 +7,11 @@
   var sliderLevelPin = sliderProgressBar.querySelector('.effect-level__pin');
   var effectLevelDepth = sliderHolder.querySelector('.effect-level__depth');
 
+  // Ширина слайдера в px
   var SLIDER_LEN = sliderProgressBar.offsetWidth;
+
+  // Значение по умолчанию для слайдера берем из Inputa
+  var DEFAULT_VALUE = sliderValue.value;
 
   var Unit = {
     SYMBOL: '%',
@@ -15,13 +19,14 @@
     MIN: 0
   };
 
-  var movePin = function (position, shift) {
+  // Инициализируем значения по умолчанию
+  sliderLevelPin.style.left = DEFAULT_VALUE + Unit.SYMBOL;
+  effectLevelDepth.style.width = DEFAULT_VALUE + Unit.SYMBOL;
+  var movePin = function (position) {
 
     // Переводим в проценты
-    position = Math.floor(position / SLIDER_LEN * Unit.MAX);
-
-    // Добавляем текущую позицию если она есть
-    position = (shift) ? shift - position : position;
+    var currentPosition = parseFloat(sliderLevelPin.style.left);
+    position = currentPosition - (position / SLIDER_LEN * Unit.MAX);
 
     // Проверяем на выход из диапозона
     if (position >= Unit.MAX) {
@@ -32,35 +37,49 @@
 
     sliderLevelPin.style.left = position + Unit.SYMBOL;
     effectLevelDepth.style.width = position + Unit.SYMBOL;
-    sliderValue.value = position;
+    sliderValue.value = Math.floor(position);
   };
 
-  // Отрабатываем перемещения пин по клику мыши
   /*
-  sliderHolder.addEventListener('click', function (evt) {
+  var onClick = function (evt) {
     evt.preventDefault();
-    var position = evt.offsetX;
-    console.log(evt.offsetX);
-    movePin(position, 0);
-  });
+    var position = evt.offsetX / SLIDER_LEN * Unit.MAX;
+    sliderLevelPin.style.left = position + Unit.SYMBOL;
+    effectLevelDepth.style.width = position + Unit.SYMBOL;
+    sliderValue.value = position;
+  };
+  // Отрабатываем перемещения пин по клику мыши
+  sliderHolder.addEventListener('click', onClick);
   */
 
   sliderLevelPin.addEventListener('mousedown', function (evt) {
-    var startPosition = evt.clientX;
+    evt.preventDefault();
+
+    // Записываем начальные координаты
+    var startX = evt.clientX;
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-      var shiftPosition = startPosition - moveEvt.clientX;
-      var currentPosition = +sliderValue.value;
-      movePin(shiftPosition, currentPosition);
+      // Вычисляем смещение мыши по оси оX
+      var moveX = moveEvt.clientX;
+      var shiftPosition = startX - moveX;
+
+      // Функция для обновление слайдера
+      movePin(shiftPosition);
+
+      // Меняем стартовые координаты
+      startX = moveX;
     };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
+
+      // После отпускания мыши удаляем события которые уже не нужны
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
 
+    // По клику возобновляем события
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });

@@ -38,6 +38,8 @@
     sliderLevelPin.style.left = position + Unit.SYMBOL;
     effectLevelDepth.style.width = position + Unit.SYMBOL;
     sliderValue.value = Math.floor(position);
+
+    return (sliderValue.value);
   };
 
   /*
@@ -65,6 +67,7 @@
       var shiftPosition = startX - moveX;
 
       // Функция для обновление слайдера
+      renderEffect(shiftPosition)
       movePin(shiftPosition);
 
       // Меняем стартовые координаты
@@ -82,5 +85,50 @@
     // По клику возобновляем события
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+  });
+
+
+  var imgUploadForm = document.querySelector('.img-upload__form');
+  var sliderValue = imgUploadForm.querySelector('.effect-level__value');
+  var effectsSet = imgUploadForm.querySelector('.img-upload__effects');
+  var image = imgUploadForm.querySelector('.img-upload__preview')
+    .querySelector('img');
+
+  var renderEffect = function (name, value) {
+    var CLASS_PERFIX = 'effects__preview--';
+    switch (name) {
+      case 'none':
+        image.className = '';
+        image.style = '';
+        break;
+      case 'chrome':
+        image.className = (CLASS_PERFIX + name);
+        value = value / 100;
+        image.style = 'filter: grayscale(' + value + ')';
+        break;
+      case 'sepia':
+        image.className = (CLASS_PERFIX + name);
+        value = value / 100;
+        image.style = 'filter: sepia(' + value + ')';
+        break;
+      case 'marvin':
+        image.className = (CLASS_PERFIX + name);
+        image.style = 'filter: invert(' + value + '%)';
+        break;
+      case 'phobos':
+        image.className = (CLASS_PERFIX + name);
+        value = value * 3 / 100;
+        image.style = 'filter: blur(' + value + 'px)';
+        break;
+      case 'heat':
+        image.className = (CLASS_PERFIX + name);
+        value = (value < 1) ? value * 3 / 100 + 1 : value * 3 / 100;
+        image.style = 'filter: brightness(' + value + ')';
+        break;
+    }
+  };
+
+  effectsSet.addEventListener('change', function (evt) {
+    renderEffect(evt.target.value, sliderValue.value);
   });
 })();

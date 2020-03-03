@@ -15,7 +15,13 @@
         action();
       }
     },
-    image: document.querySelector('.img-upload__preview')
-    .querySelector('img')
+
+    image: document.querySelector('.img-upload__preview').querySelector('img'),
+
+    getRandom: function (end, start) {
+      start = start || 0;
+      end = end - start;
+      return Math.floor(Math.random() * end + start);
+    }
   };
 })();

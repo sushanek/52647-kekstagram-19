@@ -7,11 +7,14 @@
   var sliderLevelPin = sliderProgressBar.querySelector('.effect-level__pin');
   var effectLevelDepth = sliderHolder.querySelector('.effect-level__depth');
 
+  // Отключаем слайдер эффекта по умолчанию
+  // sliderHolder.classList.add('hidden');
+
   // Ширина слайдера в px
   var SLIDER_LEN = sliderProgressBar.offsetWidth;
 
   // Значение по умолчанию для слайдера берем из Inputa
-  var DEFAULT_VALUE = sliderValue.value;
+  var DEFAULT_VALUE = 100;
 
   var Unit = {
     SYMBOL: '%',
@@ -22,11 +25,13 @@
   // Инициализируем значения по умолчанию
   sliderLevelPin.style.left = DEFAULT_VALUE + Unit.SYMBOL;
   effectLevelDepth.style.width = DEFAULT_VALUE + Unit.SYMBOL;
-  var movePin = function (position) {
+  var movePin = function (position, type) {
 
     // Переводим в проценты
     var currentPosition = parseFloat(sliderLevelPin.style.left);
-    position = currentPosition - (position / SLIDER_LEN * Unit.MAX);
+
+    // Если функция вызвана кликом, не учитываем текущее положение пина
+    position = (type === 'click') ? position / SLIDER_LEN * Unit.MAX : currentPosition - (position / SLIDER_LEN * Unit.MAX);
 
     // Проверяем на выход из диапозона
     if (position >= Unit.MAX) {
@@ -39,20 +44,20 @@
     effectLevelDepth.style.width = position + Unit.SYMBOL;
     sliderValue.value = Math.floor(position);
 
-    return (sliderValue.value);
+    // применяем эффект к фотографии
+    renderEffect(getEffectName(), position);
   };
 
-  /*
+  // Отрабатываем перемещения пин по клику мыши
   var onClick = function (evt) {
     evt.preventDefault();
-    var position = evt.offsetX / SLIDER_LEN * Unit.MAX;
-    sliderLevelPin.style.left = position + Unit.SYMBOL;
-    effectLevelDepth.style.width = position + Unit.SYMBOL;
-    sliderValue.value = position;
+    if (evt.target.className !== 'effect-level__pin') {
+      movePin(evt.offsetX, 'click');
+    }
   };
-  // Отрабатываем перемещения пин по клику мыши
+
   sliderHolder.addEventListener('click', onClick);
-  */
+
 
   sliderLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -67,7 +72,6 @@
       var shiftPosition = startX - moveX;
 
       // Функция для обновление слайдера
-      renderEffect(shiftPosition)
       movePin(shiftPosition);
 
       // Меняем стартовые координаты
@@ -88,11 +92,18 @@
   });
 
 
+  // Работа со списком эффектов
   var imgUploadForm = document.querySelector('.img-upload__form');
-  var sliderValue = imgUploadForm.querySelector('.effect-level__value');
-  var effectsSet = imgUploadForm.querySelector('.img-upload__effects');
+  var effectsField = imgUploadForm.querySelector('.img-upload__effects');
+  var effectsInput = effectsField.querySelectorAll('.effects__radio');
   var image = imgUploadForm.querySelector('.img-upload__preview')
     .querySelector('img');
+
+  // Инициализация загрузки
+  image.className = '';
+  image.style = '';
+  sliderHolder.classList.add('hidden');
+
 
   var renderEffect = function (name, value) {
     var CLASS_PERFIX = 'effects__preview--';
@@ -122,13 +133,31 @@
         break;
       case 'heat':
         image.className = (CLASS_PERFIX + name);
-        value = (value < 1) ? value * 3 / 100 + 1 : value * 3 / 100;
+        value = 1 + value * 2 / 100;
         image.style = 'filter: brightness(' + value + ')';
         break;
     }
   };
 
-  effectsSet.addEventListener('change', function (evt) {
-    renderEffect(evt.target.value, sliderValue.value);
-  });
+  var getEffectName = function () {
+    for (var i = 0; i < effectsInput.length; i++) {
+      if (effectsInput[i].checked === true) {
+        return effectsInput[i].value;
+      }
+    }
+  };
+
+
+
+  // Отслеживание переключения слайдера
+  effectsField.addEventListener('change', function (evt) {
+    var effectName = evt.target.value;
+    if (effectName === 'none') {
+      sliderHolder.classList.add('hidden');
+    } else {
+      sliderHolder.classList.remove('hidden');
+    }
+    renderEffect(effectName, DEFAULT_VALUE);
+  })
+
 })();

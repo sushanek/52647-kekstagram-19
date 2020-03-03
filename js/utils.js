@@ -14,6 +14,8 @@
       if (evt.keyCode === this.ENTER_KEY) {
         action();
       }
-    }
+    },
+    image: document.querySelector('.img-upload__preview')
+    .querySelector('img')
   };
 })();

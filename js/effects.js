@@ -1,37 +1,54 @@
 'use strict';
 
 (function () {
-  var sliderHolder = document.querySelector('.effect-level');
+
+  // Форма
+  var imgUploadForm = document.querySelector('.img-upload__form');
+
+  // Слайдер
+  var sliderHolder = imgUploadForm.querySelector('.effect-level');
   var sliderValue = sliderHolder.querySelector('.effect-level__value');
   var sliderProgressBar = sliderHolder.querySelector('.effect-level__line');
   var sliderLevelPin = sliderProgressBar.querySelector('.effect-level__pin');
+
+  // Эффекты
   var effectLevelDepth = sliderHolder.querySelector('.effect-level__depth');
+  var effectsField = imgUploadForm.querySelector('.img-upload__effects');
+  var effectsInput = effectsField.querySelectorAll('.effects__radio');
 
-  // Отключаем слайдер эффекта по умолчанию
-  // sliderHolder.classList.add('hidden');
+  // Изображение
+  var image = window.utils.image;
 
-  // Ширина слайдера в px
-  var SLIDER_LEN = sliderProgressBar.offsetWidth;
+  // Инициализация загрузки
+  image.className = '';
+  image.style = '';
+  sliderHolder.classList.add('hidden');
 
   // Значение по умолчанию для слайдера берем из Inputa
   var DEFAULT_VALUE = 100;
 
   var Unit = {
     SYMBOL: '%',
-    MAX: '100',
+    MAX: 100,
     MIN: 0
   };
 
   // Инициализируем значения по умолчанию
   sliderLevelPin.style.left = DEFAULT_VALUE + Unit.SYMBOL;
   effectLevelDepth.style.width = DEFAULT_VALUE + Unit.SYMBOL;
-  var movePin = function (position, type) {
 
+  var movePin = function (position, type) {
+    // Узнаем длину слайдера
+    var SLIDER_LEN = sliderProgressBar.offsetWidth;
     // Переводим в проценты
     var currentPosition = parseFloat(sliderLevelPin.style.left);
 
-    // Если функция вызвана кликом, не учитываем текущее положение пина
-    position = (type === 'click') ? position / SLIDER_LEN * Unit.MAX : currentPosition - (position / SLIDER_LEN * Unit.MAX);
+    // Если функция вызвана кликом или инициализацией, не учитываем текущее положение пина
+    if (type === 'quick') {
+      position = position / SLIDER_LEN * Unit.MAX;
+    } else {
+      position = currentPosition - (position / SLIDER_LEN * Unit.MAX);
+    }
 
     // Проверяем на выход из диапозона
     if (position >= Unit.MAX) {
@@ -52,7 +69,8 @@
   var onClick = function (evt) {
     evt.preventDefault();
     if (evt.target.className !== 'effect-level__pin') {
-      movePin(evt.offsetX, 'click');
+
+      movePin(evt.offsetX, 'quick');
     }
   };
 
@@ -91,73 +109,62 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-
   // Работа со списком эффектов
-  var imgUploadForm = document.querySelector('.img-upload__form');
-  var effectsField = imgUploadForm.querySelector('.img-upload__effects');
-  var effectsInput = effectsField.querySelectorAll('.effects__radio');
-  var image = imgUploadForm.querySelector('.img-upload__preview')
-    .querySelector('img');
-
-  // Инициализация загрузки
-  image.className = '';
-  image.style = '';
-  sliderHolder.classList.add('hidden');
-
-
   var renderEffect = function (name, value) {
     var CLASS_PERFIX = 'effects__preview--';
     switch (name) {
-      case 'none':
-        image.className = '';
-        image.style = '';
-        break;
       case 'chrome':
         image.className = (CLASS_PERFIX + name);
         value = value / 100;
-        image.style = 'filter: grayscale(' + value + ')';
+        image.style.filter = 'grayscale(' + value + ')';
         break;
       case 'sepia':
         image.className = (CLASS_PERFIX + name);
         value = value / 100;
-        image.style = 'filter: sepia(' + value + ')';
+        image.style.filter = 'sepia(' + value + ')';
         break;
       case 'marvin':
         image.className = (CLASS_PERFIX + name);
-        image.style = 'filter: invert(' + value + '%)';
+        image.style.filter = 'invert(' + value + '%)';
         break;
       case 'phobos':
         image.className = (CLASS_PERFIX + name);
         value = value * 3 / 100;
-        image.style = 'filter: blur(' + value + 'px)';
+        image.style.filter = 'blur(' + value + 'px)';
         break;
       case 'heat':
         image.className = (CLASS_PERFIX + name);
         value = 1 + value * 2 / 100;
-        image.style = 'filter: brightness(' + value + ')';
+        image.style.filter = 'brightness(' + value + ')';
         break;
     }
   };
 
+  // Возвращает название эффекта
   var getEffectName = function () {
     for (var i = 0; i < effectsInput.length; i++) {
       if (effectsInput[i].checked === true) {
-        return effectsInput[i].value;
+        var res = effectsInput[i].value;
       }
     }
+    return res;
   };
-
-
 
   // Отслеживание переключения слайдера
   effectsField.addEventListener('change', function (evt) {
     var effectName = evt.target.value;
+    var SLIDER_LEN;
     if (effectName === 'none') {
       sliderHolder.classList.add('hidden');
+      image.className = '';
+      image.style.filter = '';
+      sliderValue.value = '';
     } else {
+      // Если не скрыт слайдер можно узнать его длинну и выстовить пин на максимум при переключении
       sliderHolder.classList.remove('hidden');
+      SLIDER_LEN = sliderProgressBar.offsetWidth;
+      movePin(SLIDER_LEN, 'quick');
+      renderEffect(effectName, DEFAULT_VALUE);
     }
-    renderEffect(effectName, DEFAULT_VALUE);
-  })
-
+  });
 })();

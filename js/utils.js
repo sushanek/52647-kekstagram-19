@@ -22,6 +22,12 @@
       start = start || 0;
       end = end - start;
       return Math.floor(Math.random() * end + start);
+    },
+
+    getRandomUnique: function (max, array) {
+      var res = Math.floor(Math.random() * max);
+      var isDuble = (!(array.indexOf(res) + 1));
+      return isDuble ? res : this.getRandomUnique(max, array);
     }
   };
 })();

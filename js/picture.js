@@ -36,14 +36,15 @@
 
   // фото по рандому добиться уникальности
   var randomPhoto = function (photos) {
-
+    var photoAmount = photos.length;
     var photosCopy = photos;
     var fragment = document.createDocumentFragment();
     var count = 10;
     var randomIndex;
-
+    var randomUnique = [];
     for (var i = 0; i < count; i++) {
-      randomIndex = window.utils.getRandom(photosCopy.length);
+      randomUnique.push(window.utils.getRandomUnique(photoAmount, randomUnique));
+      randomIndex = randomUnique[i];
       fragment.appendChild(renderPicture(photosCopy[randomIndex], randomIndex));
     }
     // Вставляем фрагмент с фото

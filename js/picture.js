@@ -3,7 +3,6 @@
 (function () {
   var pictureInsert = document.querySelector('.pictures');
   var imgFilters = document.querySelector('.img-filters');
-  var filterButtons = document.querySelectorAll('.img-filters__button');
 
   // Шаблон для отрисовки изображений
   var pictureTemplate = document.querySelector('#picture')
@@ -80,7 +79,11 @@
     var activeClass = 'img-filters__button--active';
     for (var i = 0; i < buttons.length; i++) {
       var button = buttons[i];
-      (button.id === id) ? button.classList.add(activeClass) : button.classList.remove(activeClass);
+      if (button.id === id) {
+        button.classList.add(activeClass);
+      } else {
+        button.classList.remove(activeClass);
+      }
     }
   };
 
@@ -110,12 +113,13 @@
     imgFilters.classList.remove('img-filters--inactive');
 
     // Один обработчик на все кнопки
+
     imgFilters.addEventListener('click', function (evt) {
       var buttonClass = 'img-filters__button';
       var isActive = evt.target.classList.contains(buttonClass);
       if (isActive) {
         switchPhotos(evt);
-      };
+      }
     });
   };
 
@@ -125,7 +129,7 @@
     // Первичная загрузка фото по-умолчанию
     insertPhoto(photos);
 
-    //Работа с фильтрм
+    // Работа с фильтрм
     applyFilter();
 
     // Добовляем на контейнер с картинками событие по клику

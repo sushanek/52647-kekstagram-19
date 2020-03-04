@@ -12,9 +12,9 @@
     MAX: 100,
     STEP: 25,
     DEFAULT: 100
-  }
+  };
 
-  var setScale = function(value) {
+  var setScale = function (value) {
     // Устанавливаем значение формы
 
     scaleValue.value = value + '%';
@@ -23,9 +23,9 @@
     value = value / 100;
 
     image.style.transform = 'scale(' + value + ')';
-  }
+  };
 
-  var changeScale = function(evt) {
+  var changeScale = function (evt) {
     var type = evt.target.className;
     var less = /smaller/;
     var more = /bigger/;
@@ -45,9 +45,6 @@
   setScale(Scale.DEFAULT);
 
   // Обработка событий по нажатию кнопок
-  scaleSmaller.addEventListener ('click', changeScale);
-  scaleBigger.addEventListener ('click', changeScale);
-
-
-
+  scaleSmaller.addEventListener('click', changeScale);
+  scaleBigger.addEventListener('click', changeScale);
 })();

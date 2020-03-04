@@ -24,8 +24,6 @@
   image.style = '';
   sliderHolder.classList.add('hidden');
 
-
-
   // Значение по умолчанию для слайдера берем из Inputa
   var DEFAULT_VALUE = 100;
 
@@ -46,7 +44,7 @@
     var currentPosition = parseFloat(sliderLevelPin.style.left);
 
     // Если функция вызвана кликом или инициализацией, не учитываем текущее положение пина
-    if (type == 'quick') {
+    if (type === 'quick') {
       position = position / SLIDER_LEN * Unit.MAX;
     } else {
       position = currentPosition - (position / SLIDER_LEN * Unit.MAX);
@@ -111,7 +109,7 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
- // Работа со списком эффектов
+  // Работа со списком эффектов
   var renderEffect = function (name, value) {
     var CLASS_PERFIX = 'effects__preview--';
     switch (name) {
@@ -142,15 +140,15 @@
     }
   };
 
+  // Возвращает название эффекта
   var getEffectName = function () {
     for (var i = 0; i < effectsInput.length; i++) {
       if (effectsInput[i].checked === true) {
-        return effectsInput[i].value;
+        var res = effectsInput[i].value;
       }
     }
+    return res;
   };
-
-
 
   // Отслеживание переключения слайдера
   effectsField.addEventListener('change', function (evt) {
@@ -168,6 +166,5 @@
       movePin(SLIDER_LEN, 'quick');
       renderEffect(effectName, DEFAULT_VALUE);
     }
-  })
-
+  });
 })();

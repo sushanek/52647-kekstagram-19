@@ -4,6 +4,8 @@
   window.utils = {
     ESC_KEY: 27,
     ENTER_KEY: 13,
+    DEBOUNCE_INTERVAL: 500,
+
     pressEscEvent: function (evt, action) {
       if (evt.keyCode === this.ESC_KEY) {
         action();
@@ -28,6 +30,17 @@
       var res = Math.floor(Math.random() * max);
       var isDuble = (!(array.indexOf(res) + 1));
       return isDuble ? res : this.getRandomUnique(max, array);
+    },
+    errorHandle: function (message) {
+      window.getPopup('server', message);
+    },
+
+    debounce: function (cb) {
+      var lastTimeout;
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(cb, this.DEBOUNCE_INTERVAL);
     }
   };
 })();

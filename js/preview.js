@@ -12,8 +12,13 @@
     var imageInfo = preview.querySelector('.social__header');
     var description = imageInfo.querySelector('.social__caption');
     var likesCount = imageInfo.querySelector('.likes-count');
+    var commentsCountHolder = preview.querySelector('.social__comment-count');
     var commentsCount = preview.querySelector('.comments-count');
+    var commentsCurrent = preview.querySelector('.comments-currrent');
+    var buttonMoreComments = preview.querySelector('.comments-loader');
+    var comments = preview.querySelector('.social__comments');
 
+    var MAX_COMMENTS = 5;
     image.src = photo.url;
     likesCount.innerHTML = photo.likes;
     description.innerHTML = photo.description;
@@ -24,37 +29,69 @@
     .content
     .querySelector('.social__comment');
 
+    // Создания блока для одного комментария
     var renderComment = function (data) {
       var comment = commentTemplate.cloneNode(true);
       var commentImage = comment.querySelector('.social__picture');
       var commentText = comment.querySelector('.social__text');
-
       commentImage.src = data.avatar;
       commentImage.alt = data.name;
       commentText.innerHTML = data.message;
-
       return comment;
     };
 
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < photo.comments.length; i++) {
-      fragment.appendChild(renderComment(photo.comments[i]));
-    }
+    // Если комментариев меньше 5 скрываем счетчик и кнопку загрузки
+    var checkCommentsLen = function (array, isClick) {
+      if (array.length <= 5 && !isClick) {
+        commentsCountHolder.classList.add('hidden');
+      } else if (array.length < 5 && isClick) {
+        buttonMoreComments.classList.add('hidden');
 
-    // Контейнер для комментариев
-    var comments = preview.querySelector('.social__comments');
-    comments.innerHTML = '';
-    comments.appendChild(fragment);
+        // Прокручиваем страницу до последних комментариев
+        comments.scrollIntoView(false);
+      }
+    };
 
+    var insertComments = function (array) {
+      var fragment = document.createDocumentFragment();
+      for (var i = 0; i < array.length; i++) {
+        fragment.appendChild(renderComment(array[i]));
+      }
+      comments.appendChild(fragment);
+    };
 
-    // Работа с комментариями
-    // Скрываем счетчик (2 задание)
-    preview.querySelector('.social__comment-count').classList.add('hidden');
-    preview.querySelector('.comments-loader').classList.add('hidden');
+    // Копируем массив с комментариями
+    var commentsCopy = photo.comments.slice();
+
+    // Проверили колличество всех комментариев
+    checkCommentsLen(commentsCopy, false);
+
+    // Отрисовали первые 5 или весе комментарии
+    var commentParts = commentsCopy.splice(0, MAX_COMMENTS);
+    insertComments(commentParts);
 
     // Отображаем окно
     document.querySelector('body').classList.add('modal-open');
     preview.classList.remove('hidden');
+
+    // Объявляем счетчик комментариев
+    var comentsCount = MAX_COMMENTS;
+
+    buttonMoreComments.addEventListener('click', function () {
+      // Отрезаем от массива новую часть и показываем ее
+      commentParts = commentsCopy.splice(0, MAX_COMMENTS);
+      insertComments(commentParts);
+
+      // Обновляем счетчик комментариев
+      comentsCount += commentParts.length;
+      commentsCurrent.innerHTML = comentsCount;
+
+      // Проверяем очередную порцию комментариев на длину
+      checkCommentsLen(commentParts, true);
+
+      // Прокручиваем страницу до кнопки загрузки
+      buttonMoreComments.scrollIntoView(false);
+    });
 
     var closeButton = preview.querySelector('.cancel');
 

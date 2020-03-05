@@ -12,8 +12,12 @@
     var imageInfo = preview.querySelector('.social__header');
     var description = imageInfo.querySelector('.social__caption');
     var likesCount = imageInfo.querySelector('.likes-count');
+    var commentsCountHolder = preview.querySelector('.social__comment-count');
     var commentsCount = preview.querySelector('.comments-count');
+    var buttonMoreComments = preview.querySelector('.comments-loader');
+    var comments = preview.querySelector('.social__comments');
 
+    var MAX_COMMENTS = 5;
     image.src = photo.url;
     likesCount.innerHTML = photo.likes;
     description.innerHTML = photo.description;
@@ -36,25 +40,38 @@
       return comment;
     };
 
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < photo.comments.length; i++) {
-      fragment.appendChild(renderComment(photo.comments[i]));
-    }
+    // Если комментариев меньше 5 скрываем счетчик и кнопку загрузки
+    var checkCommentsLen = function (array) {
+      var commentParts = array.splice(0, MAX_COMMENTS);
+      if (array.length <= MAX_COMMENTS) {
+        buttonMoreComments.classList.add('hidden');
+        commentsCountHolder.classList.add('hidden');
+      }
+      return commentParts;
+    };
 
-    // Контейнер для комментариев
-    var comments = preview.querySelector('.social__comments');
-    comments.innerHTML = '';
-    comments.appendChild(fragment);
+    var insertComments = function (array) {
+      var fragment = document.createDocumentFragment();
+      for (var i = 0; i < array.length; i++) {
+        fragment.appendChild(renderComment(array[i]));
+      }
+      comments.appendChild(fragment);
+    };
 
-
-    // Работа с комментариями
-    // Скрываем счетчик (2 задание)
-    preview.querySelector('.social__comment-count').classList.add('hidden');
-    preview.querySelector('.comments-loader').classList.add('hidden');
+    // Инициализация
+    var commentsCopy = photo.comments.slice();
+    insertComments(divideComments(commentsCopy);
 
     // Отображаем окно
     document.querySelector('body').classList.add('modal-open');
     preview.classList.remove('hidden');
+
+    // Копируем массив с комментариями
+
+
+    buttonMoreComments.addEventListener('click', function (evt) {
+      insertComments(divideComments(commentsCopy);
+    });
 
     var closeButton = preview.querySelector('.cancel');
 

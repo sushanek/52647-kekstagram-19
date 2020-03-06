@@ -34,7 +34,7 @@
       return false;
     };
 
-    // Функция проверки самих хэштегов
+    // Функция проверки каждого хэштега
     var checkTag = function (tag) {
       if (tag.length === 0) {
         errorMessage = '';
@@ -49,7 +49,7 @@
       }
     };
 
-    // Проверка хэштегов
+    // Проверка строки с хэштегами
     if (hashtags.length > HASHTAGS_AMOUNT) {
       errorMessage = MESSAGE_HASHTAGS_AMOUNT;
     } else if (checkDouble(hashtags)) {

@@ -10,6 +10,10 @@
   var imgUploadPopup = imgUploadForm.querySelector('.img-upload__overlay');
   var uploadClose = imgUploadPopup.querySelector('.img-upload__cancel');
 
+  // Прогресс-бар
+  var effectLevelLine = imgUploadPopup.querySelector('.effect-level__line');
+  var effectLevelPin = effectLevelLine.querySelector('.effect-level__pin');
+
   // Функция для обработки нажатия ESC
   var onPopupEscPress = function (evt) {
     var targetClass = evt.target.className;
@@ -27,6 +31,7 @@
     document.querySelector('body').classList.add('modal-open');
     imgUploadPopup.classList.remove('hidden');
     document.addEventListener('keydown', onPopupEscPress);
+
     // Обработка события Отпускания мыши
     effectLevelPin.addEventListener('mouseup', getEffectLevelPinPosition);
     imgUploadPopup.querySelector('.text__hashtags').focus();
@@ -47,13 +52,7 @@
   uploadClose.addEventListener('click', closePopup);
 
   // Насыщенность фильтра для изображения
-  // Прогресс-бар
-  var effectLevelLine = imgUploadPopup.querySelector('.effect-level__line');
-
-  // Ползунок прогресс-бара
-  var effectLevelPin = effectLevelLine.querySelector('.effect-level__pin');
-
-  // Функция достает значение ползунка
+  // Функция достает значение ползунка насыщенности фильтра для изображения
   var getEffectLevelPinPosition = function (evt) {
     var effectLevelLineWidth = effectLevelLine.offsetWidth; // Длина програсс-бара
     var effectLevelPinPosition = evt.target.offsetLeft; // положение ползунка

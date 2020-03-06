@@ -25,17 +25,16 @@
   sliderHolder.classList.add('hidden');
 
   // Значение по умолчанию для слайдера берем из Inputa
-  var DEFAULT_VALUE = 100;
-
   var Unit = {
     SYMBOL: '%',
     MAX: 100,
-    MIN: 0
+    MIN: 0,
+    DEFAULT: 100
   };
 
   // Инициализируем значения по умолчанию
-  sliderLevelPin.style.left = DEFAULT_VALUE + Unit.SYMBOL;
-  effectLevelDepth.style.width = DEFAULT_VALUE + Unit.SYMBOL;
+  sliderLevelPin.style.left = Unit.DEFAULT + Unit.SYMBOL;
+  effectLevelDepth.style.width = Unit.DEFAULT + Unit.SYMBOL;
 
   var movePin = function (position, type) {
     // Узнаем длину слайдера
@@ -69,13 +68,11 @@
   var onClick = function (evt) {
     evt.preventDefault();
     if (evt.target.className !== 'effect-level__pin') {
-
       movePin(evt.offsetX, 'quick');
     }
   };
 
   sliderHolder.addEventListener('click', onClick);
-
 
   sliderLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -164,7 +161,7 @@
       sliderHolder.classList.remove('hidden');
       SLIDER_LEN = sliderProgressBar.offsetWidth;
       movePin(SLIDER_LEN, 'quick');
-      renderEffect(effectName, DEFAULT_VALUE);
+      renderEffect(effectName, Unit.DEFAULT);
     }
   });
 })();

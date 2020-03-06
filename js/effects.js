@@ -144,10 +144,10 @@
   var getEffectName = function () {
     for (var i = 0; i < effectsInput.length; i++) {
       if (effectsInput[i].checked === true) {
-        var res = effectsInput[i].value;
+        return effectsInput[i].value;
       }
     }
-    return res;
+    return false;
   };
 
   // Отслеживание переключения слайдера

@@ -60,12 +60,6 @@
 
     var onPopupClick = function () {
       closePopup();
-
-      // В последствии тут будет
-      /* if (evt.target.className === 'error__button') {
-      } else {
-        closePopup();
-      */
     };
 
     document.addEventListener('click', onPopupClick);

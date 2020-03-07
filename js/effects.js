@@ -20,9 +20,11 @@
   var image = window.utils.image;
 
   // Инициализация загрузки
-  image.className = '';
-  image.style = '';
-  sliderHolder.classList.add('hidden');
+  window.clearFilter = function () {
+    image.className = '';
+    image.style = '';
+    sliderHolder.classList.add('hidden');
+  };
 
   // Значение по умолчанию для слайдера берем из Inputa
   var DEFAULT_VALUE = 100;

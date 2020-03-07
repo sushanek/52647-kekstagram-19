@@ -31,6 +31,7 @@
     bigPicture.scrollIntoView(true);
 
     var closeButton = preview.querySelector('.cancel');
+
     var closePopup = function () {
       document.querySelector('body').classList.remove('modal-open');
       preview.classList.add('hidden');

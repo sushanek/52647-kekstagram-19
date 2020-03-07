@@ -42,6 +42,6 @@
         window.clearTimeout(lastTimeout);
       }
       lastTimeout = window.setTimeout(cb, this.DEBOUNCE_INTERVAL);
-    }
+    },
   };
 })();

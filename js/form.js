@@ -39,7 +39,11 @@
     document.removeEventListener('keydown', onPopupEscPress);
     effectLevelPin.removeEventListener('mouseup', getEffectLevelPinPosition);
     imgUploadForm.reset();
-    uploadInput.value = '';
+
+    // сбрасывем эффекты
+    window.clearFilter();
+    // сбрасываем масштаб
+    window.resetScale();
   };
 
   // Отслеживает события по клику

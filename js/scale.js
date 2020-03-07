@@ -18,6 +18,7 @@
     // Устанавливаем значение формы
 
     scaleValue.value = value + '%';
+
     // Применяем эффект
     // Приводим значение к виду для использования в стиле
     value = value / 100;
@@ -40,9 +41,10 @@
     }
   };
 
-  // Инициализация
-  scaleValue.value = Scale.DEFAULT;
-  setScale(Scale.DEFAULT);
+  window.resetScale = function () {
+    scaleValue.value = Scale.DEFAULT;
+    setScale(Scale.DEFAULT);
+  };
 
   // Обработка событий по нажатию кнопок
   scaleSmaller.addEventListener('click', changeScale);

@@ -543,6 +543,8 @@ main {
   height: 600px;
 
   background-color: #ffffff;
+
+  overflow: hidden;
 }
 
 .img-upload__preview img {

@@ -27,10 +27,11 @@
     },
 
     getRandomUnique: function (max, array) {
-      var res = Math.floor(Math.random() * max);
+      var res = this.getRandom(max);
       var isDuble = (!(array.indexOf(res) + 1));
-      return isDuble ? res : this.getRandomUnique(max, array);
+      return isDuble ? array.push(res) : this.getRandomUnique(max, array);
     },
+
     errorHandle: function (message) {
       window.getPopup('server', message);
     },
@@ -41,6 +42,6 @@
         window.clearTimeout(lastTimeout);
       }
       lastTimeout = window.setTimeout(cb, this.DEBOUNCE_INTERVAL);
-    }
+    },
   };
 })();

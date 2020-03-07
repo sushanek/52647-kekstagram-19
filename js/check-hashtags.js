@@ -55,9 +55,9 @@
     } else if (checkDouble(hashtags)) {
       errorMessage = MESSAGE_HASHTAGS_REPEAT;
     } else if (hashtags.length > 0) {
-      for (var i = 0; i < hashtags.length; i++) {
-        checkTag(hashtags[i]);
-      }
+      hashtags.forEach(function (element) {
+        checkTag(element);
+      });
     }
     return errorMessage;
   };

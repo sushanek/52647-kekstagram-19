@@ -20,9 +20,11 @@
   var image = window.utils.image;
 
   // Инициализация загрузки
-  image.className = '';
-  image.style = '';
-  sliderHolder.classList.add('hidden');
+  window.clearFilter = function () {
+    image.className = '';
+    image.style = '';
+    sliderHolder.classList.add('hidden');
+  };
 
   // Значение по умолчанию для слайдера берем из Inputa
   var DEFAULT_VALUE = 100;
@@ -144,10 +146,10 @@
   var getEffectName = function () {
     for (var i = 0; i < effectsInput.length; i++) {
       if (effectsInput[i].checked === true) {
-        var res = effectsInput[i].value;
+        return effectsInput[i].value;
       }
     }
-    return res;
+    return false;
   };
 
   // Отслеживание переключения слайдера

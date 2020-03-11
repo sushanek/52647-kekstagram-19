@@ -36,7 +36,7 @@
     pictureInsert.appendChild(fragment);
   };
 
-  var loadHandle = function (photos) {
+  var onLoad = function (photos) {
     window.photos = photos;
 
     // Первичная загрузка фото по-умолчанию
@@ -45,5 +45,5 @@
     // Работа с фильтрм
     window.useFilter();
   };
-  window.load('GET', loadHandle, window.utils.errorHandle);
+  window.load('GET', onLoad, window.utils.onError);
 })();

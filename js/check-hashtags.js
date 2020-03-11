@@ -12,6 +12,7 @@
     var MESSAGE_VALID_SYMBOL = 'Хэштэг должен содержать только буквы и цифры';
     var MESSAGE_HASHTAGS_AMOUNT = 'Хэштегов не может быть больше ' + HASHTAGS_AMOUNT;
     var MESSAGE_HASHTAGS_REPEAT = 'Хэштеги не должны повторяться';
+    var errorMessage;
 
     // Убираем повторяющиеся пробелы
     hashtags = hashtags.replace(/\s+/g, ' ');
@@ -20,7 +21,6 @@
     // переводим все буквы в нижний регистр
     // разбиваем строку на массив
     hashtags = hashtags.trim().toLowerCase().split(' ');
-    var errorMessage;
 
     // Функция проверка на наличие дублей в массиве
     var checkDouble = function (array) {
@@ -36,7 +36,7 @@
 
     // Функция проверки самих хэштегов
     var checkTag = function (tag) {
-      if (tag.length === 0) {
+      if (!tag.length) {
         errorMessage = '';
       } else if (tag.charAt(0) !== '#') {
         errorMessage = MESSAGE_FIRST_SYMBOL;

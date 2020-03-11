@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var RANDOMS_PHOTO_SUM = 10;
 
   var imgFilters = document.querySelector('.img-filters');
   // Фильтр фотографий: по-умолчанию
@@ -19,15 +20,14 @@
   };
 
   // Фильтр фотографий: случайные 10 фотографий (без повторов)
-  var RANDOMS_PHOTO_SUM = 10;
   var getFilterRandom = function () {
     var photos = [];
-    var uniqueIndexArroy = [];
+    var indexArrays = [];
     var photoAmount = window.photos.length;
 
     for (var i = 0; i < RANDOMS_PHOTO_SUM; i++) {
-      uniqueIndexArroy.push(window.utils.getRandomUnique(photoAmount, uniqueIndexArroy));
-      photos.push(window.photos[uniqueIndexArroy[i]]);
+      indexArrays.push(window.utils.getRandomUnique(photoAmount, indexArrays));
+      photos.push(window.photos[indexArrays[i]]);
     }
     window.insertFragment(photos);
   };

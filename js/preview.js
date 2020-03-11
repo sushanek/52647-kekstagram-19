@@ -17,10 +17,14 @@
     // Куда вставляем комментарии
     var comments = preview.querySelector('.social__comments');
 
+    // Кнопка закрытия окна
+    var closeButton = preview.querySelector('.cancel');
+
+
     image.src = photo.url;
-    likesCount.innerHTML = photo.likes;
-    description.innerHTML = photo.description;
-    commentsCount.innerHTML = photo.comments.length;
+    likesCount.innerText = photo.likes;
+    description.innerText = photo.description;
+    commentsCount.innerText = photo.comments.length;
     // оброботка комментариев
     window.showComments(photo.comments);
     // Отображаем окно
@@ -30,21 +34,18 @@
     // Прокручиваем окно до фотографии
     bigPicture.scrollIntoView(true);
 
-    var closeButton = preview.querySelector('.cancel');
-
     var closePopup = function () {
       document.querySelector('body').classList.remove('modal-open');
       preview.classList.add('hidden');
       // очищаем вставленные комменатрии
       comments.innerHTML = '';
+      document.removeEventListener('keydown', onEscClosePopup);
     };
 
     var onEscClosePopup = function (evt) {
       if (evt.keyCode === window.utils.ESC_KEY) {
         closePopup();
-        document.removeEventListener('keydown', onEscClosePopup);
       }
-
     };
 
     closeButton.addEventListener('click', closePopup);

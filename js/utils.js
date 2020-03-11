@@ -32,7 +32,7 @@
       return isDuble ? array.push(res) : this.getRandomUnique(max, array);
     },
 
-    errorHandle: function (message) {
+    onError: function (message) {
       window.getPopup('server', message);
     },
 

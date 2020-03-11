@@ -2,6 +2,9 @@
 
 (function () {
 
+  // Значение по умолчанию для слайдера
+  var DEFAULT_VALUE = 100;
+
   // Форма
   var imgUploadForm = document.querySelector('.img-upload__form');
 
@@ -19,20 +22,17 @@
   // Изображение
   var image = window.utils.image;
 
+  var Unit = {
+    SYMBOL: '%',
+    MAX: 100,
+    MIN: 0
+  };
+
   // Инициализация загрузки
   window.clearFilter = function () {
     image.className = '';
     image.style = '';
     sliderHolder.classList.add('hidden');
-  };
-
-  // Значение по умолчанию для слайдера берем из Inputa
-  var DEFAULT_VALUE = 100;
-
-  var Unit = {
-    SYMBOL: '%',
-    MAX: 100,
-    MIN: 0
   };
 
   // Инициализируем значения по умолчанию
@@ -46,11 +46,7 @@
     var currentPosition = parseFloat(sliderLevelPin.style.left);
 
     // Если функция вызвана кликом или инициализацией, не учитываем текущее положение пина
-    if (type === 'quick') {
-      position = position / SLIDER_LEN * Unit.MAX;
-    } else {
-      position = currentPosition - (position / SLIDER_LEN * Unit.MAX);
-    }
+    position = (type === 'quick') ? position / SLIDER_LEN * Unit.MAX : currentPosition - (position / SLIDER_LEN * Unit.MAX);
 
     // Проверяем на выход из диапозона
     if (position >= Unit.MAX) {
@@ -85,7 +81,7 @@
     // Записываем начальные координаты
     var startX = evt.clientX;
 
-    var onMouseMove = function (moveEvt) {
+    var moveMouse = function (moveEvt) {
       moveEvt.preventDefault();
       // Вычисляем смещение мыши по оси оX
       var moveX = moveEvt.clientX;
@@ -102,12 +98,12 @@
       upEvt.preventDefault();
 
       // После отпускания мыши удаляем события которые уже не нужны
-      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mousemove', moveMouse);
       document.removeEventListener('mouseup', onMouseUp);
     };
 
     // По клику возобновляем события
-    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mousemove', moveMouse);
     document.addEventListener('mouseup', onMouseUp);
   });
 
@@ -145,7 +141,7 @@
   // Возвращает название эффекта
   var getEffectName = function () {
     for (var i = 0; i < effectsInput.length; i++) {
-      if (effectsInput[i].checked === true) {
+      if (effectsInput[i].checked) {
         return effectsInput[i].value;
       }
     }

@@ -10,6 +10,11 @@
   var imgUploadPopup = imgUploadForm.querySelector('.img-upload__overlay');
   var uploadClose = imgUploadPopup.querySelector('.img-upload__cancel');
 
+  // обработка формы
+  var uploadForm = document.querySelector('.img-upload__form');
+  var hashtagsInput = uploadForm.querySelector('.text__hashtags');
+
+
   // Функция для обработки нажатия ESC
   var onPopupEscPress = function (evt) {
     var targetClass = evt.target.className;
@@ -24,6 +29,7 @@
 
   // Функция открывает окно и добавляет отслеживания ESC
   var openPopup = function () {
+    window.clearFilter();
     document.querySelector('body').classList.add('modal-open');
     imgUploadPopup.classList.remove('hidden');
     document.addEventListener('keydown', onPopupEscPress);
@@ -65,14 +71,10 @@
     return Math.round(effectLevelPinPosition / effectLevelLineStep); // возвращаем позицию в процентах
   };
 
-  // обработка формы
-  var uploadForm = document.querySelector('.img-upload__form');
-  var hashtagsInput = uploadForm.querySelector('.text__hashtags');
-
   // Функция сбрасывает ошибку и отписывается от наблюдения
-  var handleInput = function (evt) {
+  var changeInput = function (evt) {
     evt.target.setCustomValidity('');
-    hashtagsInput.removeEventListener('input', handleInput);
+    hashtagsInput.removeEventListener('input', changeInput);
   };
 
   // Отслеживаем изменения в поле ввода при потере фокуса
@@ -85,19 +87,19 @@
       evt.target.setCustomValidity(errorMessage);
 
       // Подписываемся на изменения в инпуте
-      hashtagsInput.addEventListener('input', handleInput);
+      hashtagsInput.addEventListener('input', changeInput);
 
       // Выдаем сообщение обо ошибке
       uploadForm.reportValidity();
     }
   });
 
-  var loadHandler = function () {
+  var onLoad = function () {
     closePopup();
     window.getPopup('success');
   };
 
-  var errorHandler = function () {
+  var onError = function () {
     closePopup();
     window.getPopup('error');
   };
@@ -105,7 +107,7 @@
 
   imgUploadForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.load('POST', loadHandler, errorHandler, new FormData(imgUploadForm));
+    window.load('POST', onLoad, onError, new FormData(imgUploadForm));
 
   });
 })();

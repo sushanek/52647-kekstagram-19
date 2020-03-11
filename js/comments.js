@@ -1,6 +1,9 @@
 'use strict';
 
 (function () {
+
+  var MAX_COMMENTS = 5;
+
   // Шаблон для комментариев
   var commentTemplate = document.querySelector('#social__comment')
     .content
@@ -22,8 +25,6 @@
   // Кнопка показа комментариев
   var buttonMoreComments = preview.querySelector('.comments-loader');
 
-  var MAX_COMMENTS = 5;
-
   // Создания блока для одного комментария
   var renderComment = function (element) {
     var comment = commentTemplate.cloneNode(true);
@@ -32,7 +33,7 @@
     commentImage.src = element.avatar;
     commentImage.alt = element.name;
     comment.tabIndex = '0';
-    commentText.innerHTML = element.message;
+    commentText.innerText = element.message;
     return comment;
   };
 
@@ -67,7 +68,7 @@
 
     // Инициализируем счетчик комментариев
     var comentsCount = MAX_COMMENTS;
-    commentsCurrent.innerHTML = comentsCount;
+    commentsCurrent.innerText = comentsCount;
 
     // Показ комментариев по клику
     var getComments = function () {
@@ -77,7 +78,7 @@
 
       // Обновляем счетчик комментариев
       comentsCount += commentParts.length;
-      commentsCurrent.innerHTML = comentsCount;
+      commentsCurrent.innerText = comentsCount;
 
       // Если массив пустой скрываем кнопку и прокручиваем до последних комментариев
       // Иначе прокручиваем страницу до кнопки загрузки

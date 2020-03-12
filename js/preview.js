@@ -34,7 +34,7 @@
     // Прокручиваем окно до фотографии
     bigPicture.scrollIntoView(true);
 
-    var closePopup = function () {
+    var onPopupClose = function () {
       document.querySelector('body').classList.remove('modal-open');
       preview.classList.add('hidden');
       // очищаем вставленные комменатрии
@@ -44,11 +44,11 @@
 
     var onEscClosePopup = function (evt) {
       if (evt.keyCode === window.utils.ESC_KEY) {
-        closePopup();
+        onPopupClose();
       }
     };
 
-    closeButton.addEventListener('click', closePopup);
+    closeButton.addEventListener('click', onPopupClose);
     document.addEventListener('keydown', onEscClosePopup);
   };
 })();

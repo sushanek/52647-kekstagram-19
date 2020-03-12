@@ -81,7 +81,7 @@
     // Записываем начальные координаты
     var startX = evt.clientX;
 
-    var moveMouse = function (moveEvt) {
+    var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
       // Вычисляем смещение мыши по оси оX
       var moveX = moveEvt.clientX;
@@ -98,12 +98,12 @@
       upEvt.preventDefault();
 
       // После отпускания мыши удаляем события которые уже не нужны
-      document.removeEventListener('mousemove', moveMouse);
+      document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
 
     // По клику возобновляем события
-    document.addEventListener('mousemove', moveMouse);
+    document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
 

@@ -26,7 +26,7 @@
     image.style.transform = 'scale(' + value + ')';
   };
 
-  var changeScale = function (evt) {
+  var onScaleChange = function (evt) {
     var type = evt.target.className;
     var less = /smaller/;
     var more = /bigger/;
@@ -47,6 +47,6 @@
   };
 
   // Обработка событий по нажатию кнопок
-  scaleSmaller.addEventListener('click', changeScale);
-  scaleBigger.addEventListener('click', changeScale);
+  scaleSmaller.addEventListener('click', onScaleChange);
+  scaleBigger.addEventListener('click', onScaleChange);
 })();

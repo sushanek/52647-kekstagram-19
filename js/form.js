@@ -23,12 +23,12 @@
 
     // Закрываем по ESC окно загрузки фотографии если нет фокуса на поля ввода
     if (targetClass !== inputClass && targetClass !== textareaClass) {
-      window.utils.pressEscEvent(evt, closePopup);
+      window.utils.pressEscEvent(evt, onPopupClose);
     }
   };
 
   // Функция открывает окно и добавляет отслеживания ESC
-  var openPopup = function () {
+  var onPopupOpen = function () {
     window.clearFilter();
     document.querySelector('body').classList.add('modal-open');
     imgUploadPopup.classList.remove('hidden');
@@ -39,7 +39,7 @@
   };
 
   // Функция: Закрывает окно и убирает отслеживание нажатяи ESC
-  var closePopup = function () {
+  var onPopupClose = function () {
     document.querySelector('body').classList.remove('modal-open');
     imgUploadPopup.classList.add('hidden');
     document.removeEventListener('keydown', onPopupEscPress);
@@ -53,8 +53,8 @@
   };
 
   // Отслеживает события по клику
-  uploadInput.addEventListener('change', openPopup);
-  uploadClose.addEventListener('click', closePopup);
+  uploadInput.addEventListener('change', onPopupOpen);
+  uploadClose.addEventListener('click', onPopupClose);
 
   // Насыщенность фильтра для изображения
   // Прогресс-бар
@@ -72,9 +72,9 @@
   };
 
   // Функция сбрасывает ошибку и отписывается от наблюдения
-  var changeInput = function (evt) {
+  var onInputChange = function (evt) {
     evt.target.setCustomValidity('');
-    hashtagsInput.removeEventListener('input', changeInput);
+    hashtagsInput.removeEventListener('input', onInputChange);
   };
 
   // Отслеживаем изменения в поле ввода при потере фокуса
@@ -87,7 +87,7 @@
       evt.target.setCustomValidity(errorMessage);
 
       // Подписываемся на изменения в инпуте
-      hashtagsInput.addEventListener('input', changeInput);
+      hashtagsInput.addEventListener('input', onInputChange);
 
       // Выдаем сообщение обо ошибке
       uploadForm.reportValidity();
@@ -95,12 +95,12 @@
   });
 
   var onLoad = function () {
-    closePopup();
+    onPopupClose();
     window.getPopup('success');
   };
 
   var onError = function () {
-    closePopup();
+    onPopupClose();
     window.getPopup('error');
   };
 

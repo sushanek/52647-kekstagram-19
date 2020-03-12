@@ -28,8 +28,8 @@
 
     getRandomUnique: function (max, array) {
       var res = this.getRandom(max);
-      var isDuble = (!(array.indexOf(res) + 1));
-      return isDuble ? array.push(res) : this.getRandomUnique(max, array);
+      var isDuble = array.indexOf(res) > -1;
+      return isDuble ? this.getRandomUnique(max, array) : array.push(res);
     },
 
     onError: function (message) {

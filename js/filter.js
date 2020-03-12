@@ -30,7 +30,9 @@
       photos.push(window.photos[indexArrays[i]]);
     }
     window.insertFragment(photos);
+
   };
+
 
   // Функция удаляет фото
   var clearPhotos = function () {
